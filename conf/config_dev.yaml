@@ -1,0 +1,11 @@
+server:
+  server_port: 8080
+  debug_port: 8079
+  enable_pprof: true
+  mode: "debug"
+  read_timeout: 10s
+  write_timeout: 10s
+  domain: "localhost"
+redis:
+  host: 127.0.0.1
+  port: 6379
