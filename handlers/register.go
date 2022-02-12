@@ -15,6 +15,21 @@ import (
 )
 
 func Register(ctx *gin.Context) {
+	switch ctx.Request.Method {
+	case http.MethodPost:
+		postRegister(ctx)
+	case http.MethodGet:
+		getRegister(ctx)
+	default:
+		ctx.JSON(http.StatusMethodNotAllowed, common.Response(nil, faults.ErrBadRequest))
+	}
+}
+
+func getRegister(ctx *gin.Context) {
+	ctx.HTML(http.StatusOK, "register.html", gin.H{})
+}
+
+func postRegister(ctx *gin.Context) {
 	var err error
 	var req core.RegisterReq
 	err = ctx.ShouldBind(&req)
@@ -68,5 +83,6 @@ func Register(ctx *gin.Context) {
 		return
 	}
 	// todo-register successfully, redirect to home page
-	ctx.JSON(http.StatusOK, common.Response(nil, nil))
+	// ctx.JSON(http.StatusOK, common.Response(nil, nil))
+	ctx.Redirect(http.StatusFound, "/twitter/index")
 }
