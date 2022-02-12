@@ -5,6 +5,7 @@ http_server:
   mode: "release"
   read_timeout: 10s
   write_timeout: 10s
+  domain: "localhost"
 redis:
   host: 127.0.0.1
   port: 6379

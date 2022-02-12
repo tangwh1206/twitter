@@ -17,6 +17,22 @@ import (
 )
 
 func Login(ctx *gin.Context) {
+	log.Println("Login called")
+	switch ctx.Request.Method {
+	case http.MethodPost:
+		postLogin(ctx)
+	case http.MethodGet:
+		getLogin(ctx)
+	default:
+		ctx.JSON(http.StatusMethodNotAllowed, common.Response(nil, faults.ErrBadRequest))
+	}
+}
+
+func getLogin(ctx *gin.Context) {
+	ctx.HTML(http.StatusOK, "login.html", gin.H{})
+}
+
+func postLogin(ctx *gin.Context) {
 	var err error
 	var req core.LoginReq
 	err = ctx.ShouldBind(&req)
@@ -88,8 +104,9 @@ func Login(ctx *gin.Context) {
 	}
 	// set cookie
 	sessionKey := session.GenSessionByUID(int64(uid))
-	ctx.SetCookie(common.TwitterSessionV1Key, sessionKey, common.SessionExpireTime, "/", conf.GetSetting().Server.Domain, false, true)
+	ctx.SetCookie(common.TwitterSessionV1Key, sessionKey, common.SessionExpireTime, "/", conf.GetSetting().Server.Domain, false, false)
 
 	// todo-login successfully, redirect to home page and set cookie
-	ctx.JSON(http.StatusOK, common.Response(nil, nil))
+	// ctx.JSON(http.StatusOK, common.Response(nil, nil))
+	ctx.Redirect(http.StatusFound, "/twitter/index")
 }
